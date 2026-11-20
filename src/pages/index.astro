@@ -1,0 +1,115 @@
+---
+import '../styles/global.css';
+import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
+---
+
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Soul Rays – הרכב חברים מאזור הגליל והגולן, שירים מקוריים וקאברים</title>
+    <meta name="description" content="Soul Rays, הרכב חברים מאזור הגליל והגולן. שירים מקוריים, מילים ומופעים." />
+    <link rel="icon" href="/images/logo.png" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="intro">
+        <img class="logo" src="/images/logo.png" alt="Soul Rays" />
+        <div>
+          <h1>Soul Rays</h1>
+          <p>חברי ההרכב מגיעים מאזור הגליל והגולן ומביאים איתם אוסף של טקסטים איכותיים שנבחרו בקפידה עטופים במלודיה שנוגעת בנשמה</p>
+        </div>
+      </header>
+
+      <section class="band">
+        <div class="booking">
+          <p class="pitch-title">הדברים הקטנים בחיים</p>
+          <p>מופע שירים מקוריים, רגעים ממסע החיים. על אושר, אהבה, פרידה, פחדים וגעגועים</p>
+          <p class="book-label">להזמנת הופעות</p>
+          <a class="phone" href={`tel:${phone}`}>{phone}</a>
+          <a class="down" href="#more" aria-label="לשירים ולהופעות">
+            <svg viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm-32-154.3V152c0-13.3 10.7-24 24-24h16c13.3 0 24 10.7 24 24v149.7l52.7-52.7c9.4-9.4 24.6-9.4 33.9 0l11.3 11.3c9.4 9.4 9.4 24.6 0 33.9l-112 112c-9.4 9.4-24.6 9.4-33.9 0l-112-112c-9.4-9.4-9.4-24.6 0-33.9l11.3-11.3c9.4-9.4 24.6-9.4 33.9 0L224 301.7z"/></svg>
+          </a>
+        </div>
+        {members.map((member) => (
+          <article class="member">
+            <img src={member.image} alt="" />
+            <h2>{member.name}</h2>
+            <p>{member.bio}</p>
+          </article>
+        ))}
+      </section>
+
+      <section class="split" id="more">
+        <div class="stack">
+          <div class="player" data-player>
+            <h2 class="section-title">טעימה מהשירים שלנו</h2>
+            <div class="controls">
+              <button class="play" type="button" data-play aria-label={`נגן ${tracks[0].title}`}>
+                <svg data-icon="play" viewBox="0 0 18 24" aria-hidden="true"><path d="M18 12c0 .712-.37 1.355-.99 1.72L3.159 23.625C2.757 23.889 2.382 24 2 24c-1.103 0-2-.897-2-2V2C0 .897.897 0 2 0c.385 0 .76.111 1.085.323l13.962 9.981c.583.34.953.983.953 1.695z"/></svg>
+                <svg data-icon="pause" viewBox="0 0 16 24" aria-hidden="true"><path d="M0 0h6v24H0zM10 0h6v24h-6z"/></svg>
+              </button>
+              <div>
+                <p class="now-title" data-title>{tracks[0].title}</p>
+                <p class="now-credit" data-credit>{tracks[0].credit}</p>
+              </div>
+              <label class="progress">
+                <input data-seek type="range" min="0" max="1000" value="0" aria-label="מיקום בשיר" />
+                <span class="time" data-time>0:00</span>
+              </label>
+            </div>
+            <div class="lyrics" data-lyrics aria-hidden="true"></div>
+            <div>
+              {tracks.map((track, index) => (
+                <button class:list={['track', { active: index === 0 }]} type="button" data-track={index}>
+                  <strong>{track.title}</strong>
+                  <small>{track.credit}</small>
+                </button>
+              ))}
+            </div>
+            <audio preload="none"></audio>
+          </div>
+
+          <section class="story">
+            <h2 class="section-title">מה היה, מה יהיה?</h2>
+            <div class="video">
+              <iframe
+                src={`https://www.youtube.com/embed/${youtubeId}?rel=0`}
+                title="soulrays - הופעה בריטריט"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="carousel" data-carousel>
+              {photos.map((photo, index) => (
+                <img src={photo.src} alt={photo.alt} hidden={index !== 0} />
+              ))}
+              <button class="prev" type="button" data-prev aria-label="שקופית קודמת">‹</button>
+              <button class="next" type="button" data-next aria-label="שקופית הבאה">›</button>
+            </div>
+          </section>
+        </div>
+
+        <aside class="shows">
+          <h2 class="section-title">הופעות</h2>
+          {shows.map((show) => (
+            <p class:list={['show', { current: show.current }]}>
+              <strong>{show.date}</strong>
+              {show.href ? <a href={show.href} target="_blank" rel="noopener">{show.place}</a> : <span>{show.place}</span>}
+            </p>
+          ))}
+        </aside>
+      </section>
+    </main>
+
+    <footer>
+      <p>כל הזכויות שמורות ל-SoulRays</p>
+      <p>להזמנת הופעות - <a href={`tel:${phone}`}>{phone}</a> (רמי)</p>
+      <p>בניה ועיצוב: <a href="https://bennys.work/">bennys.work</a></p>
+    </footer>
+
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>
