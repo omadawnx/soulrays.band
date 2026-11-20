@@ -174,7 +174,7 @@ h1 {
   flex: 1;
   height: 3px;
   accent-color: #444;
-  direction: rtl;
+  direction: ltr;
 }
 
 .time { min-width: 2.6rem; font-size: 12px; font-variant-numeric: tabular-nums; }
@@ -284,6 +284,7 @@ h1 {
   display: block;
   width: 100%;
   height: auto;
+  margin-bottom: 14px;
 }
 
 .show.current { grid-template-columns: max-content 1fr; }

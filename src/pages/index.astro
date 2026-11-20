@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
+import { members, nextShow, phone, photos, shows, tracks, youtubeId } from '../data/site';
 ---
 
 <html lang="he" dir="rtl">
@@ -51,7 +51,7 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
                 <p class="now-credit" data-credit>{tracks[0].credit}</p>
               </div>
               <label class="progress">
-                <input data-seek type="range" min="0" max="1000" value="0" aria-label="מיקום בשיר" />
+                <input data-seek type="range" min="0" max="1000" value="0" dir="ltr" aria-label="מיקום בשיר" />
                 <span class="time" data-time>0:00</span>
               </label>
               <div class="meta">
@@ -103,7 +103,7 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
 
         <aside class="shows">
           <h2 class="section-title">הופעות</h2>
-          <img class="next-show" src="/images/next-show.jpg" alt="ההופעה הבאה: 12/12 מוצ״ש בשעה 20:00, אמירים בבית העם, הכניסה חופשית" />
+          {nextShow && <img class="next-show" src={nextShow.src} alt={nextShow.alt} />}
           {shows.map((show) => (
             <p class:list={['show', { current: show.current }]}>
               <strong>{show.date}</strong>

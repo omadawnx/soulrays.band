@@ -25,6 +25,11 @@ export type Show = {
   current?: boolean;
 };
 
+export const nextShow: { src: string; alt: string } | null = {
+  src: '/images/next-show.jpg',
+  alt: 'ההופעה הבאה: 12/12 מוצ״ש בשעה 20:00, אמירים בבית העם, הכניסה חופשית',
+};
+
 export const shows: Show[] = [
   { date: '12 לנובמבר בשעה 20:00', place: 'אמירים', current: true },
   { date: 'ינואר 2026', place: 'ריטריט קפה, ראש פינה', href: 'https://www.facebook.com/RetreatCafeandBeing' },

@@ -14,6 +14,7 @@ if (player) {
   const volume = player.querySelector<HTMLInputElement>('[data-volume]');
   let index = 0;
   let seeking = false;
+  let armSeek = false;
   let repeat = false;
 
   const fmt = (seconds: number) => {
@@ -31,20 +32,34 @@ if (player) {
   };
 
   const showTrack = (next: number) => {
+    const track = tracks[(next + tracks.length) % tracks.length];
+    const same = audio.currentSrc.endsWith(track.src);
     index = (next + tracks.length) % tracks.length;
-    const track = tracks[index];
     title.textContent = track.title;
     credit.textContent = track.credit;
     buttons.forEach((button, i) => button.classList.toggle('active', i === index));
-    if (audio.src !== new URL(track.src, location.origin).href) {
+    if (!same) {
+      seek.value = '0';
+      seeking = false;
+      armSeek = false;
       audio.src = track.src;
     }
     renderLyrics();
     playButton.setAttribute('aria-label', `נגן ${track.title}`);
   };
 
+  const applySlider = () => {
+    const duration = audio.duration;
+    if (!Number.isFinite(duration) || duration <= 0) return false;
+    audio.currentTime = (Number(seek.value) / 1000) * duration;
+    armSeek = false;
+    time.textContent = fmt(audio.currentTime);
+    return true;
+  };
+
   const play = async () => {
     showTrack(index);
+    if (armSeek || Number(seek.value) > 0) applySlider();
     await audio.play();
   };
 
@@ -109,23 +124,27 @@ if (player) {
     }
   });
 
+  audio.addEventListener('loadedmetadata', () => {
+    if (armSeek || Number(seek.value) > 0) applySlider();
+  });
+
   audio.addEventListener('timeupdate', () => {
+    if (seeking || armSeek) return;
     time.textContent = fmt(audio.currentTime);
-    if (!seeking && audio.duration) {
+    if (audio.duration) {
       seek.value = String(Math.round((audio.currentTime / audio.duration) * 1000));
     }
   });
 
-  seek.addEventListener('pointerdown', () => {
-    seeking = true;
-  });
-
-  seek.addEventListener('pointerup', () => {
-    seeking = false;
-  });
-
   seek.addEventListener('input', () => {
-    if (audio.duration) audio.currentTime = (Number(seek.value) / 1000) * audio.duration;
+    seeking = true;
+    armSeek = true;
+    applySlider();
+  });
+
+  seek.addEventListener('change', () => {
+    applySlider();
+    seeking = false;
   });
 }
 
