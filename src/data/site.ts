@@ -26,6 +26,7 @@ export type Show = {
 };
 
 export const shows: Show[] = [
+  { date: '12 לנובמבר בשעה 20:00', place: 'אמירים', current: true },
   { date: 'ינואר 2026', place: 'ריטריט קפה, ראש פינה', href: 'https://www.facebook.com/RetreatCafeandBeing' },
   { date: 'דצמבר 2025', place: 'בר הגרניק, עמיעד' },
   { date: 'אוג׳ 2025', place: 'כפר נופש פרוד' },

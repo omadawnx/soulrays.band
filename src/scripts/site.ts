@@ -10,8 +10,11 @@ if (player) {
   const time = player.querySelector('[data-time]')!;
   const lyrics = player.querySelector('[data-lyrics]')!;
   const buttons = [...player.querySelectorAll<HTMLButtonElement>('[data-track]')];
+  const repeatButton = player.querySelector<HTMLButtonElement>('[data-repeat]');
+  const volume = player.querySelector<HTMLInputElement>('[data-volume]');
   let index = 0;
   let seeking = false;
+  let repeat = false;
 
   const fmt = (seconds: number) => {
     if (!Number.isFinite(seconds)) return '0:00';
@@ -22,7 +25,7 @@ if (player) {
 
   const renderLyrics = () => {
     const track = tracks[index];
-    lyrics.innerHTML = `<div class="lyrics-inner"><h3>${track.title}</h3><p class="credit">${track.credit}</p>${track.lyrics
+    lyrics.innerHTML = `<div class="lyrics-inner"><h3>${track.title}</h3>${track.lyrics
       .map((stanza) => `<p>${stanza}</p>`)
       .join('')}</div>`;
   };
@@ -50,6 +53,25 @@ if (player) {
   playButton.addEventListener('click', () => {
     if (audio.paused) play();
     else audio.pause();
+  });
+
+  player.querySelector('[data-prev]')?.addEventListener('click', () => {
+    showTrack(index - 1);
+    play();
+  });
+
+  player.querySelector('[data-next]')?.addEventListener('click', () => {
+    showTrack(index + 1);
+    play();
+  });
+
+  repeatButton?.addEventListener('click', () => {
+    repeat = !repeat;
+    repeatButton.setAttribute('aria-pressed', String(repeat));
+  });
+
+  volume?.addEventListener('input', () => {
+    audio.volume = Number(volume.value);
   });
 
   buttons.forEach((button) => {
@@ -81,7 +103,7 @@ if (player) {
   });
 
   audio.addEventListener('ended', () => {
-    if (index < tracks.length - 1) {
+    if (index < tracks.length - 1 || repeat) {
       showTrack(index + 1);
       play();
     }
@@ -109,13 +131,11 @@ if (player) {
 
 const carousel = document.querySelector<HTMLElement>('[data-carousel]');
 if (carousel) {
-  const slides = [...carousel.querySelectorAll<HTMLImageElement>('img')];
+  const reel = carousel.querySelector<HTMLElement>('[data-reel]')!;
   let index = 0;
   const show = (next: number) => {
     index = (next + photos.length) % photos.length;
-    slides.forEach((slide, i) => {
-      slide.hidden = i !== index;
-    });
+    reel.style.transform = `translateX(-${index * 100}%)`;
   };
   carousel.querySelector('[data-prev]')?.addEventListener('click', () => show(index - 1));
   carousel.querySelector('[data-next]')?.addEventListener('click', () => show(index + 1));

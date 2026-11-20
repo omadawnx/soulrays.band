@@ -13,9 +13,9 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
   </head>
   <body>
     <main class="wrap">
-      <header class="intro">
+      <header class="hero">
         <img class="logo" src="/images/logo.png" alt="Soul Rays" />
-        <div>
+        <div class="intro">
           <h1>Soul Rays</h1>
           <p>חברי ההרכב מגיעים מאזור הגליל והגולן ומביאים איתם אוסף של טקסטים איכותיים שנבחרו בקפידה עטופים במלודיה שנוגעת בנשמה</p>
         </div>
@@ -27,9 +27,6 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
           <p>מופע שירים מקוריים, רגעים ממסע החיים. על אושר, אהבה, פרידה, פחדים וגעגועים</p>
           <p class="book-label">להזמנת הופעות</p>
           <a class="phone" href={`tel:${phone}`}>{phone}</a>
-          <a class="down" href="#more" aria-label="לשירים ולהופעות">
-            <svg viewBox="0 0 512 512" aria-hidden="true"><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448c-110.5 0-200-89.5-200-200S145.5 56 256 56s200 89.5 200 200-89.5 200-200 200zm-32-154.3V152c0-13.3 10.7-24 24-24h16c13.3 0 24 10.7 24 24v149.7l52.7-52.7c9.4-9.4 24.6-9.4 33.9 0l11.3 11.3c9.4 9.4 9.4 24.6 0 33.9l-112 112c-9.4 9.4-24.6 9.4-33.9 0l-112-112c-9.4-9.4-9.4-24.6 0-33.9l11.3-11.3c9.4-9.4 24.6-9.4 33.9 0L224 301.7z"/></svg>
-          </a>
         </div>
         {members.map((member) => (
           <article class="member">
@@ -49,7 +46,7 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
                 <svg data-icon="play" viewBox="0 0 18 24" aria-hidden="true"><path d="M18 12c0 .712-.37 1.355-.99 1.72L3.159 23.625C2.757 23.889 2.382 24 2 24c-1.103 0-2-.897-2-2V2C0 .897.897 0 2 0c.385 0 .76.111 1.085.323l13.962 9.981c.583.34.953.983.953 1.695z"/></svg>
                 <svg data-icon="pause" viewBox="0 0 16 24" aria-hidden="true"><path d="M0 0h6v24H0zM10 0h6v24h-6z"/></svg>
               </button>
-              <div>
+              <div class="now">
                 <p class="now-title" data-title>{tracks[0].title}</p>
                 <p class="now-credit" data-credit>{tracks[0].credit}</p>
               </div>
@@ -57,9 +54,17 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
                 <input data-seek type="range" min="0" max="1000" value="0" aria-label="מיקום בשיר" />
                 <span class="time" data-time>0:00</span>
               </label>
+              <div class="meta">
+                <button type="button" data-prev aria-label="השיר הקודם"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+                <button type="button" data-next aria-label="השיר הבא"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+                <button type="button" data-repeat aria-pressed="false" aria-label="חזרה על הרשימה"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v3l4-4-4-4v3H5v6h2zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2z"/></svg></button>
+                <label class="volume">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4h4l5 5V5L7 10zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+                  <input data-volume type="range" min="0" max="1" step="0.05" value="1" aria-label="עוצמת שמע" />
+                </label>
+              </div>
             </div>
-            <div class="lyrics" data-lyrics aria-hidden="true"></div>
-            <div>
+            <div class="tracks">
               {tracks.map((track, index) => (
                 <button class:list={['track', { active: index === 0 }]} type="button" data-track={index}>
                   <strong>{track.title}</strong>
@@ -67,6 +72,7 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
                 </button>
               ))}
             </div>
+            <div class="lyrics" data-lyrics aria-hidden="true"></div>
             <audio preload="none"></audio>
           </div>
 
@@ -81,9 +87,14 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
               ></iframe>
             </div>
             <div class="carousel" data-carousel>
-              {photos.map((photo, index) => (
-                <img src={photo.src} alt={photo.alt} hidden={index !== 0} />
-              ))}
+              <div class="reel" data-reel>
+                {photos.map((photo) => (
+                  <figure>
+                    <img src={photo.src} alt={photo.alt} />
+                    <figcaption>{photo.alt}</figcaption>
+                  </figure>
+                ))}
+              </div>
               <button class="prev" type="button" data-prev aria-label="שקופית קודמת">‹</button>
               <button class="next" type="button" data-next aria-label="שקופית הבאה">›</button>
             </div>
@@ -92,6 +103,7 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
 
         <aside class="shows">
           <h2 class="section-title">הופעות</h2>
+          <img class="next-show" src="/images/next-show.jpg" alt="ההופעה הבאה: 12/12 מוצ״ש בשעה 20:00, אמירים בבית העם, הכניסה חופשית" />
           {shows.map((show) => (
             <p class:list={['show', { current: show.current }]}>
               <strong>{show.date}</strong>
@@ -105,7 +117,7 @@ import { members, phone, photos, shows, tracks, youtubeId } from '../data/site';
     <footer>
       <p>כל הזכויות שמורות ל-SoulRays</p>
       <p>להזמנת הופעות - <a href={`tel:${phone}`}>{phone}</a> (רמי)</p>
-      <p>בניה ועיצוב: <a href="https://bennys.work/">bennys.work</a></p>
+      <p><a href="https://bennys.work/">בניה ועיצוב: bennys.work</a></p>
     </footer>
 
     <script>
