@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+
+backend:
+  name: github
+  repo: omadawnx/soulrays.band
+
+media_folder: public/images
+public_folder: /images
+
+output:
+  omit_empty_optional_fields: true
+
+singletons:
+  - name: next-show
+    label: באנר ההופעה הבאה
+    file: src/data/next-show.json
+    fields:
+      - { name: enabled, label: להציג באנר, widget: boolean, default: true }
+      - { name: src, label: תמונה, widget: image, required: false }
+      - { name: alt, label: תיאור, widget: string, required: false }
+
+collections:
+  - name: shows
+    label: הופעות
+    label_singular: הופעה
+    file: src/data/shows.json
+    identifier_field: place
+    create: true
+    delete: true
+    fields:
+      - { name: date, label: תאריך }
+      - { name: place, label: מקום }
+      - { name: href, label: קישור, widget: string, required: false }
+      - { name: current, label: הופעה קרובה, widget: boolean, default: false }
+
+  - name: tracks
+    label: שירים
+    label_singular: שיר
+    file: src/data/tracks.json
+    identifier_field: title
+    create: true
+    delete: true
+    fields:
+      - { name: title, label: שם }
+      - { name: credit, label: קרדיטים, widget: text }
+      - name: src
+        label: קובץ שמע
+        widget: file
+        accept: audio/mpeg,.mp3
+        media_folder: /public/audio
+        public_folder: /audio
+      - name: lyrics
+        label: מילים
+        widget: list
+        field: { name: stanza, label: בית, widget: text }
